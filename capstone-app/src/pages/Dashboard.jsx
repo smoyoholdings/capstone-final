@@ -1,36 +1,31 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { EventContext } from "../context/EventContext";
 
 export default function Dashboard() {
-  const [events, setEvents] = useState([]);
+  const { events, addEvent, deleteEvent } = useContext(EventContext);
+
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
 
-  const addEvent = () => {
+  const handleAdd = () => {
     if (!name || !date) {
-      alert("Please fill all fields");
+      alert("Fill all fields");
       return;
     }
 
-    const newEvent = {
+    addEvent({
       id: Date.now(),
       name,
       date,
-    };
+    });
 
-    setEvents([...events, newEvent]);
     setName("");
     setDate("");
-  };
-
-  const deleteEvent = (id) => {
-    setEvents(events.filter((event) => event.id !== id));
   };
 
   return (
     <div>
       <h1>Dashboard</h1>
-
-      <h3>Add Event</h3>
 
       <input
         placeholder="Event Name"
@@ -44,9 +39,7 @@ export default function Dashboard() {
         onChange={(e) => setDate(e.target.value)}
       />
 
-      <button onClick={addEvent}>Add Event</button>
-
-      <h3>My Events</h3>
+      <button onClick={handleAdd}>Add Event</button>
 
       {events.map((event) => (
         <div key={event.id}>
