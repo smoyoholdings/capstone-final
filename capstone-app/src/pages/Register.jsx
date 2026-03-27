@@ -1,59 +1,74 @@
-import { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Register() {
-  const { register } = useContext(AuthContext);
+export default function Register() {
   const navigate = useNavigate();
 
-  // Store form input values
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  // Handle input changes
+  // Handle input change
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  // Handle form submission
+  // Handle register
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Register user using context
-    register(form);
+    if (!formData.name || !formData.email || !formData.password) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    console.log("Register Data:", formData);
 
     alert("Registration successful!");
 
-    // Redirect to login page
+    // Redirect to login
     navigate("/login");
   };
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h2>Register</h2>
 
       <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Name" onChange={handleChange} />
-        <br />
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter name"
+          value={formData.name}
+          onChange={handleChange}
+        />
+        <br /><br />
 
-        <input name="email" placeholder="Email" onChange={handleChange} />
-        <br />
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <br /><br />
 
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder="Enter password"
+          value={formData.password}
           onChange={handleChange}
         />
-        <br />
+        <br /><br />
 
         <button type="submit">Register</button>
       </form>
     </div>
   );
 }
-
-export default Register;
